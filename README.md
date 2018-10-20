@@ -30,7 +30,7 @@ returns 200 with:
       color: "Blue",
       tag: "XXX234"
     },
-      {
+    {
       lat: "81.2354",
       lng: "-25.4244",
       make: "VW",
