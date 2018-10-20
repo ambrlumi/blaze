@@ -1,0 +1,22 @@
+{
+  "name": "blaze",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ambrlumi/blaze.git",
+  "author": "Juan Alvarado <jalvarado91@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./build/main.js",
+    "dev": "backpack dev",
+    "build": "backpack build",
+    "postinstall": "backpack build"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "backpack-core": "^0.7.0",
+    "cors": "^2.8.4",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.4"
+  }
+}
