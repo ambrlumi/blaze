@@ -14,7 +14,7 @@ Api for the ambr app.
 }
 ```
 
-*returns 204 No Content *
+returns _204 No Content_
 
 
 - `GET /api/cases`
