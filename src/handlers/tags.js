@@ -1,36 +1,20 @@
 import { Case } from "../models/case";
 import { removeAllListeners } from "cluster";
 
-const index = (req, res) => {
-  const data = {
-    cases: [
-      {
-        lat: "81.2354",
-        lng: "-25.4244",
-        make: "VW",
-        color: "Blue",
-        tag: "XXX234"
-      },
-      {
-        lat: "81.2354",
-        lng: "-25.4244",
-        make: "VW",
-        color: "Blue",
-        tag: "XXX234"
-      }
-    ]
-  };
-
-  return res.status(200).send({ success: true, data: data });
+const index = async (req, res) => {
+  const allCases = await Case.find();
+  return res.status(200).send({ success: true, data: { cases: allCases } });
 };
 
 const create = (req, res) => {
+  const { tag, lat, lng, img } = req.body;
+
   let testCase = new Case({
-    lat: "81.2354",
-    lng: "-25.4244",
+    lat: lat,
+    lng: lng,
     make: "VW",
     color: "Blue",
-    tag: "XXX234"
+    tag: tag
   });
 
   testCase.save();
