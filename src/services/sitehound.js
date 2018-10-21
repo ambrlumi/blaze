@@ -40,8 +40,10 @@ const readFromStream = imageStream =>
           }
         }
       );
-      resolve(data.objects);
+
+      resolve(data);
     } catch (e) {
+      console.log(e.data);
       reject(e);
     }
   });

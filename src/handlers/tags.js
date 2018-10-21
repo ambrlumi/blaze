@@ -1,7 +1,6 @@
 import { Case } from "../models/case";
 import base64 from "base64-img";
 import uuid from "uuid/v1";
-import { removeAllListeners } from "cluster";
 import sitehound from "../services/sitehound";
 import fs from "fs";
 import path from "path";
@@ -53,6 +52,7 @@ const rm = path => {
 
 const save = data => {
   return new Promise((resolve, reject) => {
+    console.log(TMP_DIR);
     base64.img(data, TMP_DIR, uuid(), (err, location) => {
       err && reject(err);
       resolve(path.resolve(location));
@@ -62,17 +62,23 @@ const save = data => {
 
 const check = async (req, res) => {
   const { img } = req.body;
+
   try {
     let path = await save(img);
     let readStream = fs.createReadStream(path);
 
     const imagePayload = await sitehound.readFromStream(readStream);
-    console.log({imagePayload});
+
+    const { objects } = imagePayload;
+    const { system } = objects[0].vehicleAnnotation.licenseplate.attributes;
+    const tag = system.string.name;
+
+    // Call amber api
 
     return res.status(200).send(imagePayload);
   } catch (e) {
     console.log(e);
-    return res.status(400).send({ e });
+    return res.status(400).send({ success: false });
   }
 };
 
