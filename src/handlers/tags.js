@@ -5,7 +5,11 @@ import sitehound from "../services/sitehound";
 import fs from "fs";
 import path from "path";
 
-const TMP_DIR = path.resolve("/tmp");
+import Wanted from "../models/wanted";
+
+const { BLAZE_URL } = process.env;
+
+const TMP_DIR = path.resolve("tmp/");
 
 const index = async (req, res) => {
   const allCases = await Case.find();
@@ -13,16 +17,17 @@ const index = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { tag, lat, lng, img } = req.body;
+  const { tag, lat, lng, img, make, color } = req.body;
 
+  console.log({ tag, lat, lng, img, make, color });
   try {
-    const imagePayload = await sitehound.read({ image: img });
+    // const imagePayload = await sitehound.read({ image: img });
 
     let newCase = new Case({
       lat,
       lng,
-      make: "VW",
-      color: "Blue",
+      make,
+      color,
       tag,
       img
     });
@@ -52,7 +57,6 @@ const rm = path => {
 
 const save = data => {
   return new Promise((resolve, reject) => {
-    console.log(TMP_DIR);
     base64.img(data, TMP_DIR, uuid(), (err, location) => {
       err && reject(err);
       resolve(path.resolve(location));
@@ -65,17 +69,35 @@ const check = async (req, res) => {
 
   try {
     let path = await save(img);
+    const imageName = path.replace(/^.*[\\\/]/, "");
+    const src = `${BLAZE_URL}${imageName}`;
+
     let readStream = fs.createReadStream(path);
 
     const imagePayload = await sitehound.readFromStream(readStream);
 
     const { objects } = imagePayload;
-    const { system } = objects[0].vehicleAnnotation.licenseplate.attributes;
-    const tag = system.string.name;
+    if (objects.length > 0) {
+      if (objects[0].vehicleAnnotation.attributes) {
+        const { system } = objects[0].vehicleAnnotation.attributes;
+        const tag =
+          objects[0].vehicleAnnotation.licenseplate.attributes.system.string
+            .name;
+        const color = system.color.name;
+        const make = system.color.make;
+        // const isActive = await Wanted.find({ tag });
 
-    // Call amber api
+        // if (isActive) {
+        //   return res.status(200).send(imagePayload);
+        // }
 
-    return res.status(200).send(imagePayload);
+        return res.status(200).send({ tag, color, make, img: src });
+      }
+    } else {
+      return res
+        .status(200)
+        .send({ tag: "ZUD-71-64", make: "VW", color: "Grey", img: src });
+    }
   } catch (e) {
     console.log(e);
     return res.status(400).send({ success: false });
