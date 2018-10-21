@@ -19,18 +19,16 @@ const create = async (req, res) => {
   try {
     const imagePayload = await sitehound.read({ image: img });
 
-    console.log(imagePayload);
+    let newCase = new Case({
+      lat,
+      lng,
+      make: "VW",
+      color: "Blue",
+      tag,
+      img
+    });
 
-    // let newCase = new Case({
-    //   lat,
-    //   lng,
-    //   make: "VW",
-    //   color: "Blue",
-    //   tag,
-    //   img
-    // });
-
-    // newCase.save();
+    newCase.save();
 
     return res.status(204).send();
   } catch (e) {
