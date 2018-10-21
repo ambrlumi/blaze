@@ -1,3 +1,4 @@
+import "./env";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -8,6 +9,7 @@ import { apiRouter } from "./routes";
 const { PORT = 3000 } = process.env;
 
 const app = express();
+const { DB_URL } = process.env;
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -17,7 +19,7 @@ app.use("/api", apiRouter);
 
 var db = mongoose
   .connect(
-    "mongodb://root:example@localhost:27017/admin?readPreference=primary",
+    DB_URL,
     { useNewUrlParser: true, dbName: "blaze" }
   )
   .then(() => {

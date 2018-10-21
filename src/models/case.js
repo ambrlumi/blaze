@@ -6,7 +6,8 @@ const caseSchema = new Schema({
   lng: Number,
   make: String,
   color: String,
-  tag: String
+  tag: String,
+  img: String
 });
 
 let Case = mongoose.model("Case", caseSchema);
