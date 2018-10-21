@@ -9,15 +9,16 @@ const index = async (req, res) => {
 const create = (req, res) => {
   const { tag, lat, lng, img } = req.body;
 
-  let testCase = new Case({
-    lat: lat,
-    lng: lng,
+  let newCase = new Case({
+    lat,
+    lng,
     make: "VW",
     color: "Blue",
-    tag: tag
+    tag,
+    img
   });
 
-  testCase.save();
+  newCase.save();
 
   return res.status(204).send();
 };
