@@ -1,18 +1,18 @@
 //data comes in so infrequently that it makes no sense to scrape now. Is pending;
 const amber = [
    {
-      make: "",
-      color: "",
-      tag: "",
+      make: "Ford",
+      color: "Light Green",
+      tag: "ZUD-71-64",
    },
    {
-      make: "",
-      color: "",
-      tag: "",
+      make: "VW",
+      color: "Grey",
+      tag: "xxxH47",
    },
    {
-      make: "",
-      color: "",
-      tag: "",
+      make: "Honda",
+      color: "Grey",
+      tag: "xxxQ64",
    }
 ]
