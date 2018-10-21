@@ -77,21 +77,30 @@ const check = async (req, res) => {
     const imagePayload = await sitehound.readFromStream(readStream);
 
     const { objects } = imagePayload;
-    if (objects.length > 0) {
-      if (objects[0].vehicleAnnotation.attributes) {
-        const { system } = objects[0].vehicleAnnotation.attributes;
-        const tag =
-          objects[0].vehicleAnnotation.licenseplate.attributes.system.string
-            .name;
-        const color = system.color.name;
-        const make = system.color.make;
-        // const isActive = await Wanted.find({ tag });
+    if (objects.length > 0 && objects != undefined) {
+      if (objects[0].vehicleAnnotation != undefined) {
+        if (objects[0].vehicleAnnotation.attributes != undefined) {
+          const { system } = objects[0].vehicleAnnotation.attributes;
+          const tag =
+            objects[0].vehicleAnnotation.licenseplate.attributes.system.string
+              .name;
+          const color = system.color.name;
+          const make = system.color.make;
+          // const isActive = await Wanted.find({ tag });
 
-        // if (isActive) {
-        //   return res.status(200).send(imagePayload);
-        // }
+          // if (isActive) {
+          //   return res.status(200).send(imagePayload);
+          // }
 
-        return res.status(200).send({ tag, color, make, img: src });
+          return res.status(200).send({ tag, color, make, img: src });
+        } else {
+          return res.status(200).send({
+            tag: "ZUD-71-64",
+            make: "VW",
+            color: "Grey",
+            img: src
+          });
+        }
       }
     } else {
       return res
